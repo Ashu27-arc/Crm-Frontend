@@ -134,9 +134,11 @@ const AddNotification: React.FC = () => {
   }
 
   return (
+
     <div className='p-4'>
       <h2 className='text-3xl font-bold m-4'> Add Notification</h2>
       <form className='flex items-center gap-3 mb-6' onSubmit={(e)=>{e.preventDefault(); onAddOrSave()}}>
+
         <input
           type='text'
           placeholder='Notification description'
@@ -190,7 +192,7 @@ const AddNotification: React.FC = () => {
               <th className='text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-6 py-3'>Actions</th>
             </tr>
           </thead>
-        {/*notification Table */}
+          {/*notification Table */}
           <tbody className='divide-y divide-gray-100'>
             {notifications.length === 0 ? (
               <tr>

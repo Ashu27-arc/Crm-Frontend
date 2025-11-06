@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type NotificationRow = { id: string; description: string; state: string; date: string }
 type EventRow = { id: string; description: string; state: string; city?: string; country?: string; date?: string; time?: string }
 
 const Dashboard: React.FC = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const [notifications, setNotifications] = useState<NotificationRow[]>([])
   const [events, setEvents] = useState<EventRow[]>([])
 
@@ -19,30 +19,12 @@ const Dashboard: React.FC = () => {
         const nJson = await nRes.json()
         const eJson = await eRes.json()
         if (nJson?.success && Array.isArray(nJson.data)) {
-          setNotifications(
-            nJson.data.map((n: any) => ({
-              id: n._id,
-              description: n.description,
-              state: n.state,
-              date: n.date,
-            }))
-          )
+          setNotifications(nJson.data.map((n: any) => ({ id: n._id, description: n.description, state: n.state, date: n.date })))
         }
         if (eJson?.success && Array.isArray(eJson.data)) {
-          setEvents(
-            eJson.data.map((n: any) => ({
-              id: n._id,
-              description: n.description,
-              state: n.state,
-              city: n.city,
-              country: n.country,
-              date: n.date,
-              time: n.time,
-            }))
-          )
+          setEvents(eJson.data.map((n: any) => ({ id: n._id, description: n.description, state: n.state, city: n.city, country: n.country, date: n.date, time: n.time })))
         }
       } catch (e) {
-        // eslint-disable-next-line no-console
         console.error('Failed to load dashboard data', e)
       }
     }
@@ -53,16 +35,15 @@ const Dashboard: React.FC = () => {
   const formatTime = (d?: string) => (d ? new Date(d).toLocaleTimeString() : '')
 
   return (
-    <>
+    <div>
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
-
-        <div  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
-          <div onClick={()=>navigate('/Add-Notification')} className="bg-white rounded-lg shadow-md p-6 border border-gray-100 cursor-pointer hover:scale-110 hover:shadow-blue-900">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
+          <div onClick={() => navigate('/Add-Notification')} className="bg-white rounded-lg shadow-md p-6 border border-gray-100 cursor-pointer hover:scale-110 hover:shadow-blue-900">
             <div className="text-4xl font-bold text-gray-800 mb-2">{notifications.length}</div>
-            <div  className="text-gray-600 text-sm">Total Notifications</div>
+            <div className="text-gray-600 text-sm">Total Notifications</div>
           </div>
-          <div onClick={()=>navigate('/Add-Event')} className="bg-white cursor-pointer rounded-lg shadow-md p-6 border border-gray-100 hover:scale-110 hover:shadow-blue-900">
+          <div onClick={() => navigate('/Add-Event')} className="bg-white cursor-pointer rounded-lg shadow-md p-6 border border-gray-100 hover:scale-110 hover:shadow-blue-900">
             <div className="text-4xl font-bold text-gray-800 mb-2">{events.length}</div>
             <div className="text-gray-600 text-sm">Total Events</div>
           </div>
@@ -134,7 +115,7 @@ const Dashboard: React.FC = () => {
           </table>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

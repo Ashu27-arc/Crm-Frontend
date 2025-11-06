@@ -8,8 +8,8 @@ import AddEvent from './Components/AddEvent'
 import Layout from './Components/Layout'
 function App() {
   return (
-
     <Routes>
+
       {/* <Route path='/' element={<Home />} /> */}
       <Route path='/' element={<Login />} />
       <Route element={<Layout />}>
