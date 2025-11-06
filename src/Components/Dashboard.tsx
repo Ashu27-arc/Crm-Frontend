@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Lead {
   name: string;
@@ -9,49 +9,49 @@ interface Lead {
 
 
 const Dashboard: React.FC = () => {
-    const navigate=useNavigate()
-    const handleLogout = () => {
-        alert('Logout');
-        navigate('/Login')
-};
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    alert('Logout');
+    navigate('/Login')
+  };
 
 
-    const leads: Lead[] = [
-        { name: 'John Doe', email: 'john@example.com', status: 'New' },
-        { name: 'Jane Smith', email: 'jane@example.com', status: 'Contacted' },
-        { name: 'Bob Johnson', email: 'bob@example.com', status: 'Converted' },
-        { name: 'Alice Williams', email: 'alice@example.com', status: 'New' },
-    ];
-    
-    const getStatusBadgeClass = (status: string) => {
-        switch (status) {
-            case 'New':
-                return 'bg-green-100 text-green-800';
-                case 'Contacted':
-                    return 'bg-orange-100 text-orange-800';
-                    case 'Converted':
-                        return 'bg-green-100 text-green-800';
-                        default:
-                            return 'bg-gray-100 text-gray-800';
-                        }
-                        
-                    };
-                    
-                   
+  const leads: Lead[] = [
+    { name: 'John Doe', email: 'john@example.com', status: 'New' },
+    { name: 'Jane Smith', email: 'jane@example.com', status: 'Contacted' },
+    { name: 'Bob Johnson', email: 'bob@example.com', status: 'Converted' },
+    { name: 'Alice Williams', email: 'alice@example.com', status: 'New' },
+  ];
+
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case 'New':
+        return 'bg-green-100 text-green-800';
+      case 'Contacted':
+        return 'bg-orange-100 text-orange-800';
+      case 'Converted':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-blue-600 text-white px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">CRM Admin</h1>
-      
+
         <div className="cursor-pointer" onClick={handleLogout}>
-        <svg
-  className="w-6 h-6 text-white"
-  fill="currentColor"
-  viewBox="0 0 24 24"
->
-  <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
-</svg>
+          <svg
+            className="w-6 h-6 text-white"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v3h20v-3c0-3.3-6.7-5-10-5z" />
+          </svg>
 
 
         </div>
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
             </div>
 
             {/* Users */}
-            <div onClick={()=>navigate('/Add-Notification')} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
+            <div onClick={() => navigate('/Add-Notification')} className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-200 cursor-pointer transition-colors">
               <svg
                 className="w-5 h-5 text-gray-600"
                 fill="none"
@@ -106,7 +106,7 @@ const Dashboard: React.FC = () => {
           {/* Dashboard Section */}
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">Dashboard</h2>
-            
+
             {/* Metrics Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {/* Total Users Card */}
@@ -120,14 +120,14 @@ const Dashboard: React.FC = () => {
                 <div className="text-4xl font-bold text-gray-800 mb-2">350</div>
                 <div className="text-gray-600 text-sm">Drafts</div>
               </div>
-{/* 
+              {/* 
               Conversions Card
               <div className="bg-white rounded-lg shadow-md p-6 border border-gray-100">
                 <div className="text-4xl font-bold text-gray-800 mb-2">200</div>
                 <div className="text-gray-600 text-sm">Conversions</div>
               </div> */}
 
-         
+
               {/* <div className="bg-white rounded-lg shadow-md p-6 border border-gray-100">
                 <div className="text-4xl font-bold text-gray-800 mb-2">80</div>
                 <div className="text-gray-600 text-sm">Active Users</div>
@@ -138,7 +138,7 @@ const Dashboard: React.FC = () => {
           {/* Recent Leads Section */}
           <div>
             <h2 className="text-3xl font-bold text-gray-800 mb-6">Notifications</h2>
-            
+
             <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
               <table className="w-full">
                 <thead className="bg-gray-50">

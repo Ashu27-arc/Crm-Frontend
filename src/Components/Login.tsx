@@ -81,7 +81,7 @@ const Login: React.FC = () => {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-{/* <div className="flex flex-row justify-between ">
+          {/* <div className="flex flex-row justify-between ">
 
           <button  onClick={()=>navigate('/Login-Sale')} className="w-60 bg-blue-600 text-white py-2  mr-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60">
             Login as a Sales Person

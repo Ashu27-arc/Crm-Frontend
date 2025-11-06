@@ -79,13 +79,13 @@ const LoginSale: React.FC = () => {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-<div className="flex flex-row justify-between ">
+          <div className="flex flex-row justify-between ">
 
-          <button onClick={()=>navigate('/Login')} className="w-60 bg-blue-600 text-white py-2  mr-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60">
-            Login as a Admin
-          </button>
-          <button onClick={()=>navigate('/Login-Counseller')} className="w-60 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60"> <span className="p-1 ">Login as a Counseller</span></button>
-</div>
+            <button onClick={() => navigate('/Login')} className="w-60 bg-blue-600 text-white py-2  mr-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60">
+              Login as a Admin
+            </button>
+            <button onClick={() => navigate('/Login-Counseller')} className="w-60 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60"> <span className="p-1 ">Login as a Counseller</span></button>
+          </div>
         </form>
       </div>
     </div>
