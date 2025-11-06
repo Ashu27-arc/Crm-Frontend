@@ -134,7 +134,8 @@ const AddNotification: React.FC = () => {
   }
 
   return (
-    <div className='p-6'>
+    <div className='p-4'>
+      <h2 className='text-3xl font-bold m-4'> Add Notification</h2>
       <form className='flex items-center gap-3 mb-6' onSubmit={(e)=>{e.preventDefault(); onAddOrSave()}}>
         <input
           type='text'
@@ -198,7 +199,8 @@ const AddNotification: React.FC = () => {
             ) : (
               notifications.map((item, index) => (
                 <tr key={item.id} className={index % 2 === 1 ? 'bg-gray-50' : ''}>
-                  <td className='px-6 py-4 text-sm text-gray-700'>{notifications.length - index}</td>
+                  {/* <td className='px-6 py-4 text-sm text-gray-700'>{notifications.length - index}</td> */}
+                  <td className='px-6 py-4 text-sm text-gray-700'>{ index+1}</td>
                   <td className='px-6 py-4 text-sm text-gray-900'>{item.text}</td>
                   <td className='px-6 py-4 text-sm text-gray-900'>{item.state}</td>
                   <td className='px-6 py-4 text-sm text-gray-900'>{item.course}</td>
