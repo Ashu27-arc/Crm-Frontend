@@ -1,27 +1,27 @@
 import Dashboard from './Components/Dashboard'
-// import Home from './Components/Home'
 import Login from './Components/Login'
 import './App.css'
 import { Route, Routes } from 'react-router-dom'
 import AddNotification from './Components/AddNotification'
 import AddEvent from './Components/AddEvent'
 import Layout from './Components/Layout'
+import { Toaster } from "react-hot-toast";
+
 function App() {
   return (
-    <Routes>
+    <>
+      {/* Global toast notification handler */}
+      <Toaster position="top-center" reverseOrder={false} />
 
-      {/* <Route path='/' element={<Home />} /> */}
-      <Route path='/' element={<Login />} />
-      <Route element={<Layout />}>
-        <Route path='/Dashboard' element={<Dashboard />} />
-        <Route path='/Add-Notification' element={<AddNotification />} />
-        <Route path='/Add-Event' element={<AddEvent/>}/>
-      </Route>
-      
-
-
-    </Routes>
-
+      <Routes>
+        <Route path='/' element={<Login />} />
+        <Route element={<Layout />}>
+          <Route path='/Dashboard' element={<Dashboard />} />
+          <Route path='/Add-Notification' element={<AddNotification />} />
+          <Route path='/Add-Event' element={<AddEvent />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
 

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import type { FormEvent, ChangeEvent } from "react";
+import React, { useState, FormEvent, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-
-// Removed API types; using mock login
+import toast from "react-hot-toast";
+import api from "../api/axiosInstance.ts"
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -11,38 +10,38 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Single allowed credential pair
-  const allowedEmail = "admin@example.com";
-  const allowedPassword = "password123";
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Log attempted credentials
-    // eslint-disable-next-line no-console
-    console.log("Admin login attempt:", { email, password });
 
-    const isAllowed = email === allowedEmail && password === allowedPassword;
+    try {
+      // ✅ Use your axios instance (it automatically uses baseURL)
+      const res = await api.post("/admin/login", { email, password });
 
-    if (isAllowed) {
-      alert("Login successful");
+      if (res.data?.token) {
+        localStorage.setItem("token", res.data.token); // Save JWT token
+        toast.success("Login successful!");
+        navigate("/Dashboard");
+      } else {
+        toast.error("Token not received from server");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
       setLoading(false);
-      navigate("/Dashboard");
-      return;
     }
-
-    alert("Invalid email or password");
-    setLoading(false);
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-50">
+    <div className="flex items-center justify-center h-screen bg-blue-200">
       <div className="w-full max-w-sm p-6 border border-gray-200 rounded-lg shadow-lg bg-white">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-gray-800">
             <span className="text-blue-600">Admin</span> Login
           </h1>
-          <p className="text-gray-500 text-sm">Enter your credentials to continue</p>
+          <p className="text-gray-500 text-sm">
+            Enter your credentials to continue
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -81,13 +80,6 @@ const Login: React.FC = () => {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-          {/* <div className="flex flex-row justify-between ">
-
-          <button  onClick={()=>navigate('/Login-Sale')} className="w-60 bg-blue-600 text-white py-2  mr-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60">
-            Login as a Sales Person
-          </button>
-          <button onClick={()=>navigate('/Login-Counseller')} className="w-60 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-60"> <span className="p-1 ">Login as a Counseller</span></button>
-</div> */}
         </form>
       </div>
     </div>

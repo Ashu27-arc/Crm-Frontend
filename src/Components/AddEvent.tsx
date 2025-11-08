@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import type { ChangeEvent, MouseEvent } from "react";
+import React, { useEffect, useState, ChangeEvent } from "react";
+import api from "../api/axiosInstance";
+import toast from "react-hot-toast";
 
 type EventItem = {
   id: string;
@@ -13,314 +14,264 @@ type EventItem = {
   time?: string;
 };
 
+
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 const AddEvent: React.FC = () => {
-  const [inputValue, setInputValue] = useState<string>(""); // description
-  const [inputState, setInputState] = useState<string>(""); // state
-  const [inputCity, setInputCity] = useState<string>("");   // city
-  const [inputCountry, setInputCountry] = useState<string>(""); // country
-  const [inputDate, setInputDate] = useState<string>(""); // date
+  const [inputValue, setInputValue] = useState("");
+  const [inputState, setInputState] = useState("");
+  const [inputCity, setInputCity] = useState("");
+  const [inputCountry, setInputCountry] = useState("");
+  const [inputDate, setInputDate] = useState("");
+  const [inputTime, setInputTime] = useState("");
   const [inputImage, setInputImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   const [events, setEvents] = useState<EventItem[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [inputTime, setInputTime] = useState<string>(""); // time (HH:MM)
 
-  const API_BASE = "http://localhost:3000/api/events";
+  const [fetchLoading, setFetchLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
-  // Fetch events
+  // Fetch Events
   useEffect(() => {
-    const fetchAll = async () => {
+    const fetchEvents = async () => {
       try {
-        setLoading(true);
-        const res = await fetch(`${API_BASE}/all`);
-        const json = await res.json();
-        if (json?.success && Array.isArray(json.data)) {
-          const mapped: EventItem[] = json.data.map((n: any) => ({
-            id: n._id,
-            text: n.description,
-            state: n.state,
-            city: n.city,
-            country: n.country,
-            image: n.image,
-            date: n.date,
-            time: n.time,
-            createdAt: new Date(n.date).toLocaleString(),
-          }));
+        setFetchLoading(true);
+        const res = await api.get("/events/all");
+
+        if (res.data?.success && Array.isArray(res.data.data)) {
+          const mapped = res.data.data
+            .map((n: any) => ({
+              id: n._id,
+              text: n.description,
+              state: n.state,
+              city: n.city,
+              country: n.country,
+              image: n.image,
+              date: n.date,
+              time: n.time,
+              createdAt: new Date(n.createdAt).toLocaleString(),
+            }))
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
           setEvents(mapped);
         }
-      } catch (e) {
-        console.error("Failed to fetch events", e);
+      } catch {
+        toast.error("Failed to fetch events");
       } finally {
-        setLoading(false);
+        setFetchLoading(false);
       }
     };
-    fetchAll();
+
+    fetchEvents();
   }, []);
 
-  // Image selection
+  // Image Preview
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setInputImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result as string);
+    if (!file) return;
+    setInputImage(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setPreviewImage(reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  // Add or Update
+  const onAddOrSave = async () => {
+    if (!inputValue || !inputState || !inputCity || !inputCountry || !inputDate || !inputTime) {
+      return toast.error("Please fill all required fields");
+    }
+
+    const form = new FormData();
+    form.append("description", inputValue);
+    form.append("state", inputState);
+    form.append("city", inputCity);
+    form.append("country", inputCountry);
+    form.append("date", inputDate);
+    form.append("time", inputTime);
+    if (inputImage) form.append("image", inputImage);
+
+    try {
+      setSubmitLoading(true);
+
+      const res = editingId
+        ? await api.put(`/events/update/${editingId}`, form)
+        : await api.post("/events/add", form);
+
+      toast.success(editingId ? "Event updated successfully" : "Event added successfully");
+
+      const d = res.data.data;
+
+      const updatedEvent: EventItem = {
+        id: d._id,
+        text: d.description,
+        state: d.state,
+        city: d.city,
+        country: d.country,
+        image: d.image,
+        date: d.date,
+        time: d.time,
+        createdAt: new Date(d.createdAt).toLocaleString(),
       };
-      reader.readAsDataURL(file);
+
+      setEvents((prev) => [updatedEvent, ...prev.filter((e) => e.id !== editingId)]);
+      resetForm();
+    } catch {
+      toast.error("Failed to save event");
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
-  // Add or Save Event
-  const onAddOrSave = async () => {
-    const trimmed = inputValue.trim();
-    const trimmedState = inputState.trim();
-    const trimmedCity = inputCity.trim();
-    const trimmedCountry = inputCountry.trim();
-    const trimmedDate = inputDate.trim();
-    const trimmedTime = inputTime.trim();
-
-    if (!trimmed || !trimmedState || !trimmedCity || !trimmedCountry || !trimmedDate || !trimmedTime) {
-      alert("Please fill all required fields");
-      return;
-    }
-
-    // Edit locally if editingId is set (no backend update route yet)
-    if (editingId) {
-      setEvents(prev => prev.map(ev => ev.id === editingId ? {
-        ...ev,
-        text: trimmed,
-        state: trimmedState,
-        city: trimmedCity,
-        country: trimmedCountry,
-        date: trimmedDate,
-        time: trimmedTime,
-      } : ev))
-      setEditingId(null)
-      setInputValue("")
-      setInputState("")
-      setInputCity("")
-      setInputCountry("")
-      setInputDate("")
-      setInputTime("")
-      setInputImage(null)
-      setPreviewImage(null)
-      setLoading(false)
-      return
-    }
-
-    try {
-      setLoading(true);
-
-      const form = new FormData();
-      form.append("description", trimmed);
-      form.append("state", trimmedState);
-      form.append("city", trimmedCity);
-      form.append("country", trimmedCountry);
-      form.append("date", trimmedDate); 
-      form.append("time", trimmedTime);
-      if (inputImage) form.append("image", inputImage);
-
-      const res = await fetch(`${API_BASE}/add`, {
-        method: "POST",
-        body: form,
-      });
-
-      const json = await res.json();
-      if (json?.success && json?.data) {
-        const n = json.data;
-        const added: EventItem = {
-          id: n._id,
-          text: n.description,
-          state: n.state,
-          city: n.city,
-          country: n.country,
-          image: n.image,
-          date: n.date,
-          time: n.time,
-          createdAt: new Date(n.date).toLocaleString(),
-        };
-        setEvents((prev) => [added, ...prev]);
-        setInputValue("");
-        setInputState("");
-        setInputCity("");
-        setInputCountry("");
-        setInputDate("");
-        setInputTime("");
-        setInputImage(null);
-        setPreviewImage(null);
-      } else {
-        console.error("Failed:", json);
-      }
-    } catch (e) {
-      console.error("Failed to add event", e);
-    } finally {
-      setLoading(false);
-    }
+  const resetForm = () => {
+    setEditingId(null);
+    setInputValue("");
+    setInputState("");
+    setInputCity("");
+    setInputCountry("");
+    setInputDate("");
+    setInputTime("");
+    setInputImage(null);
+    setPreviewImage(null);
   };
 
   const onEdit = (id: string) => {
-    const item = events.find(e => e.id === id)
-    if (!item) return
-    setEditingId(id)
-    setInputValue(item.text)
-    setInputState(item.state)
-    setInputCity(item.city || "")
-    setInputCountry(item.country || "")
-    setInputDate(item.date || "")
-    setPreviewImage(item.image || null)
-    setInputImage(null)
-  }
+    const e = events.find((ev) => ev.id === id);
+    if (!e) return;
+
+    setEditingId(id);
+    setInputValue(e.text);
+    setInputState(e.state);
+    setInputCity(e.city);
+    setInputCountry(e.country || "");
+    setInputDate(e.date || "");
+    setInputTime(e.time || "");
+    setPreviewImage(`${BASE_URL}${e.image}`);
+  };
 
   const onDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this event?")) return;
+
     try {
-      setLoading(true);
-      await fetch(`${API_BASE}/delete/${id}`, { method: "DELETE" });
-      setEvents((prev) => prev.filter((n) => n.id !== id));
-    } catch (e) {
-      console.error("Failed to delete event", e);
+      setSubmitLoading(true);
+      await api.delete(`/events/delete/${id}`);
+      setEvents((prev) => prev.filter((ev) => ev.id !== id));
+      toast.success("Event deleted");
+    } catch {
+      toast.error("Failed to delete");
     } finally {
-      setLoading(false);
+      setSubmitLoading(false);
     }
   };
 
   return (
     <div className="p-4">
 
-        <h2 className="text-3xl font-bold  m-4 ">
-            Add Event 
-        </h2>
-      {/* Form */}
+      <h2 className="text-3xl font-bold mb-6">Manage Events</h2>
+
+      {/* FORM */}
       <form
-        className="flex flex-wrap items-center gap-3 mb-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          onAddOrSave();
-        }}
+        onSubmit={(e) => { e.preventDefault(); onAddOrSave(); }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 bg-white p-4 rounded-xl shadow-sm mb-6"
       >
-        <input
-          type="text"
-          placeholder="Event description"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className="flex-1 rounded-2xl bg-gray-100 p-4 outline-none"
-        />
-        <input
-          type="text"
-          placeholder="State"
-          value={inputState}
-          onChange={(e) => setInputState(e.target.value)}
-          className="w-48 rounded-2xl bg-gray-100 p-4 outline-none"
-        />
-        <input
-          type="text"
-          placeholder="City"
-          value={inputCity}
-          onChange={(e) => setInputCity(e.target.value)}
-          className="w-48 rounded-2xl bg-gray-100 p-4 outline-none"
-        />
-        <input
-          type="text"
-          placeholder="Country"
-          value={inputCountry}
-          onChange={(e) => setInputCountry(e.target.value)}
-          className="w-48 rounded-2xl bg-gray-100 p-4 outline-none"
-        />
-        <input
-          type="date"
-          value={inputDate}
-          onChange={(e) => setInputDate(e.target.value)}
-          className="w-48 rounded-2xl bg-gray-100 p-4 outline-none"
-        />
-        <input
-          type="time"
-          value={inputTime}
-          onChange={(e) => setInputTime(e.target.value)}
-          className="w-40 rounded-2xl bg-gray-100 p-4 outline-none"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="w-60 text-sm text-gray-600 file:mr-4 file:py-2 file:px-4
-                     file:rounded-full file:border-0 file:text-sm file:font-semibold
-                     file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-5 py-3 rounded-xl hover:bg-blue-700 active:scale-95 transition disabled:opacity-60"
-          disabled={loading}
-        >
-          {loading ? "Submitting..." : "Add"}
+        <input className="bg-gray-100 rounded-lg p-3" placeholder="Event Description" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3" placeholder="State" value={inputState} onChange={(e) => setInputState(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3" placeholder="City" value={inputCity} onChange={(e) => setInputCity(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3" placeholder="Country" value={inputCountry} onChange={(e) => setInputCountry(e.target.value)} />
+        <input type="date" className="bg-gray-100 rounded-lg p-3" value={inputDate} onChange={(e) => setInputDate(e.target.value)} />
+        <input type="time" className="bg-gray-100 rounded-lg p-3" value={inputTime} onChange={(e) => setInputTime(e.target.value)} />
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+
+        <button disabled={submitLoading} className="bg-blue-600 text-white rounded-lg px-5 py-3">
+          {submitLoading ? "Submitting..." : editingId ? "Update Event" : "Add Event"}
         </button>
       </form>
 
       {previewImage && (
-        <div className="mb-6">
-          <img src={previewImage} alt="Preview" className="w-32 h-32 object-cover rounded-xl border" />
+        <div className="flex justify-center mb-6">
+          <img src={previewImage} className="w-32 h-32 object-cover rounded-lg border" />
         </div>
       )}
 
-      {/* Table */}
-      <div className="bg-white shadow rounded-xl overflow-hidden border border-gray-100">
-        <table className="w-full">
-          <thead className="bg-gray-50">
+      {/* DESKTOP TABLE */}
+      <div className="hidden md:block bg-white rounded-xl shadow-sm overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-blue-100">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">#</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Image</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Description</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">State</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">City</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Country</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Date</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Time</th>
-              <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Actions</th>
+              <th className="px-4 py-3">#</th>
+              <th className="px-4 py-3">Image</th>
+              <th className="px-4 py-3">Description</th>
+              <th className="px-4 py-3">State</th>
+              <th className="px-4 py-3">City</th>
+              <th className="px-4 py-3">Country</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Time</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
-            {events.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="px-6 py-6 text-center text-gray-500">
-                  No events yet
+          <tbody>
+            {fetchLoading ? (
+              <tr><td colSpan={9} className="text-center py-5">Loading...</td></tr>
+            ) : events.map((e, i) => (
+              <tr key={e.id} className="border-t hover:bg-gray-50">
+                <td className="px-4 py-3">{i + 1}</td>
+
+                {/* ✅ FIXED IMAGE RENDER */}
+                <td className="px-4 py-3">
+                  {e.image ? (
+                    <img src={`${BASE_URL}${e.image}`} className="w-14 h-14 rounded-md object-cover" />
+                  ) : "─"}
+                </td>
+
+                <td className="px-4 py-3">{e.text}</td>
+                <td className="px-4 py-3">{e.state}</td>
+                <td className="px-4 py-3">{e.city}</td>
+                <td className="px-4 py-3">{e.country}</td>
+                <td className="px-4 py-3">{e.date}</td>
+                <td className="px-4 py-3">{e.time}</td>
+                <td className="px-4 py-3 flex gap-2">
+                  <button onClick={() => onEdit(e.id)} className="px-3 py-1 bg-yellow-200 rounded-md text-xs">Edit</button>
+                  <button onClick={() => onDelete(e.id)} className="px-3 py-1 bg-red-200 rounded-md text-xs">Delete</button>
                 </td>
               </tr>
-            ) : (
-              events.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 1 ? "bg-gray-50" : ""}>
-                  <td className="px-6 py-4 text-sm text-gray-700">{index+1}</td>
-                  <td className="px-6 py-4">
-                    {item.image ? (
-                      <img src={item.image} alt="Event" className="w-16 h-16 rounded-md object-cover border" />
-                    ) : (
-                      <span className="text-gray-400 text-sm">No Image</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{item.text}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{item.state}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{item.city}</td>
-                  <td className="px-6 py-4 text-sm text-gray-900">{item.country}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{item.date}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{item.time}</td>
-                  <td className="px-6 py-4">
-                    <button
-                      className="mr-2 px-3 py-1 rounded-md text-xs font-medium bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                      onClick={() => onEdit(item.id)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="px-3 py-1 rounded-md text-xs font-medium bg-red-100 text-red-800 hover:bg-red-200"
-                      onClick={() => onDelete(item.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
+            ))}
           </tbody>
         </table>
       </div>
+
+      {/* MOBILE CARDS */}
+      <div className="md:hidden space-y-4 mt-6 flex flex-col items-center px-2">
+        {fetchLoading ? (
+          <p className="text-center text-gray-500">Loading...</p>
+        ) : events.length === 0 ? (
+          <p className="text-center text-gray-500">No events yet</p>
+        ) : (
+          events.map((e, index) => (
+            <div key={e.id} className="w-full max-w-sm bg-white shadow-sm rounded-xl border border-gray-200 p-4">
+              
+              <div className="flex justify-between text-sm mb-2">
+                <span className="font-semibold text-gray-800">#{index + 1} — {e.text}</span>
+                <span className="text-gray-500">{e.date} {e.time}</span>
+              </div>
+
+              {/* ✅ FIXED IMAGE RENDER */}
+              {e.image && <img src={`${BASE_URL}${e.image}`} className="w-full h-40 rounded-lg object-cover mb-3" />}
+
+              <p className="text-sm text-gray-700"><strong>State:</strong> {e.state}</p>
+              <p className="text-sm text-gray-700"><strong>City:</strong> {e.city}</p>
+              <p className="text-sm text-gray-700 mb-3"><strong>Country:</strong> {e.country}</p>
+
+              <div className="flex gap-2">
+                <button onClick={() => onEdit(e.id)} className="flex-1 bg-yellow-100 text-yellow-800 rounded-md text-xs py-2">Edit</button>
+                <button onClick={() => onDelete(e.id)} className="flex-1 bg-red-100 text-red-800 rounded-md text-xs py-2">Delete</button>
+              </div>
+
+            </div>
+          ))
+        )}
+      </div>
+
     </div>
   );
 };

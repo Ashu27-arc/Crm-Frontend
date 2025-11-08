@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import type { FormEvent, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Removed API types; using mock login
-
 const LoginCounseller: React.FC = () => {
   const navigate = useNavigate();
 
@@ -11,15 +9,13 @@ const LoginCounseller: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Single allowed credential pair
   const allowedEmail = "admin@example.com";
   const allowedPassword = "password123";
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Log attempted credentials
-    // eslint-disable-next-line no-console
+   
     console.log("Counseller login attempt:", { email, password });
 
     const isAllowed = email === allowedEmail && password === allowedPassword;
