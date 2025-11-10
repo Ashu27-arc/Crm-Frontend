@@ -184,12 +184,12 @@ const AddEvent: React.FC = () => {
         onSubmit={(e) => { e.preventDefault(); onAddOrSave(); }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 bg-white p-4 rounded-xl shadow-sm mb-6"
       >
-        <input className="bg-gray-100 rounded-lg p-3" placeholder="Event Description" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
-        <input className="bg-gray-100 rounded-lg p-3" placeholder="State" value={inputState} onChange={(e) => setInputState(e.target.value)} />
-        <input className="bg-gray-100 rounded-lg p-3" placeholder="City" value={inputCity} onChange={(e) => setInputCity(e.target.value)} />
-        <input className="bg-gray-100 rounded-lg p-3" placeholder="Country" value={inputCountry} onChange={(e) => setInputCountry(e.target.value)} />
-        <input type="date" className="bg-gray-100 rounded-lg p-3" value={inputDate} onChange={(e) => setInputDate(e.target.value)} />
-        <input type="time" className="bg-gray-100 rounded-lg p-3" value={inputTime} onChange={(e) => setInputTime(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3 outline-none" placeholder="Event Description" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3 outline-none" placeholder="State" value={inputState} onChange={(e) => setInputState(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3 outline-none" placeholder="City" value={inputCity} onChange={(e) => setInputCity(e.target.value)} />
+        <input className="bg-gray-100 rounded-lg p-3 outline-none" placeholder="Country" value={inputCountry} onChange={(e) => setInputCountry(e.target.value)} />
+        <input type="date" className="bg-gray-100 rounded-lg p-3 outline-none" value={inputDate} onChange={(e) => setInputDate(e.target.value)} />
+        <input type="time" className="bg-gray-100 rounded-lg p-3 outline-none" value={inputTime} onChange={(e) => setInputTime(e.target.value)} />
         <input type="file" accept="image/*" onChange={handleImageChange} />
 
         <button disabled={submitLoading} className="bg-blue-600 text-white rounded-lg px-5 py-3">
