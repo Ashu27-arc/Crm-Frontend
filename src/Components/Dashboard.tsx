@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; // ✅ prevents memory leaks if user switches page fast
+    let isMounted = true; 
 
     (async () => {
       try {
@@ -37,7 +37,6 @@ const Dashboard: React.FC = () => {
         ]);
 
         if (isMounted) {
-          // ✅ Notifications
           const nData = nRes.data?.data || [];
           const mappedN: NotificationRow[] = nData.map((n: any) => ({
             id: n._id,
@@ -55,7 +54,7 @@ const Dashboard: React.FC = () => {
               .slice(0, 10)
           );
 
-          // ✅ Events
+      
           const eData = eRes.data?.data || [];
           const mappedE: EventRow[] = eData.map((e: any) => ({
             id: e._id,
@@ -84,18 +83,17 @@ const Dashboard: React.FC = () => {
     })();
 
     return () => {
-      isMounted = false; // ✅ cleanup
+      isMounted = false; 
     };
   }, []);
 
-  // ✅ Safe date format
+  
   const formatDate = (date?: string) =>
     date && !isNaN(new Date(date).getTime())
       ? new Date(date).toLocaleDateString()
       : "-";
 
-  // ✅ Safe time format
-  const formatTime = (date?: string | null) =>
+const formatTime = (date?: string | null) =>
     date && !isNaN(new Date(date).getTime())
       ? new Date(date).toLocaleTimeString([], {
           hour: "2-digit",
@@ -132,6 +130,18 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="text-gray-600 text-sm sm:text-base">
               Total Events
+            </div>
+          </div>
+          {/* total users */}
+              <div
+            onClick={() => navigate("/Counseller")}
+            className="bg-white rounded-lg shadow-md p-6 border border-gray-100 cursor-pointer transition transform hover:scale-105 hover:shadow-blue-900"
+          >
+            <div className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
+              {events.length}
+            </div>
+            <div className="text-gray-600 text-sm sm:text-base">
+              Total Users
             </div>
           </div>
         </div>

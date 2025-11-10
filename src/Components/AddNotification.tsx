@@ -114,11 +114,13 @@ const AddNotification: React.FC = () => {
     setInputState(item.state);
     setInputCourse(item.course);
   };
-
+// Add notification delete function
   const onDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this Notification ?")) return;
+
     try {
       setLoading(true);
-      await api.delete(`/notifications/${id}`); // ✅ make delete API call
+      await api.delete(`/notifications/delete/${id}`); 
       setNotifications((prev) => prev.filter((n) => n.id !== id));
       if (editingId === id) {
         setEditingId(null);

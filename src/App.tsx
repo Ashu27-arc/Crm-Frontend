@@ -6,6 +6,8 @@ import AddNotification from './Components/AddNotification'
 import AddEvent from './Components/AddEvent'
 import Layout from './Components/Layout'
 import { Toaster } from "react-hot-toast";
+import Counseller from './Components/Counseller'
+import RegisterForm from './Components/RegisterForm'
 
 function App() {
   return (
@@ -17,8 +19,10 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route element={<Layout />}>
           <Route path='/Dashboard' element={<Dashboard />} />
+           <Route path='/Counseller' element={<Counseller />} />
           <Route path='/Add-Notification' element={<AddNotification />} />
           <Route path='/Add-Event' element={<AddEvent />} />
+               <Route path='/Register' element={<RegisterForm />} />
         </Route>
       </Routes>
     </>

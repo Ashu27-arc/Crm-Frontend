@@ -82,7 +82,7 @@ const AddEvent: React.FC = () => {
     if (!inputValue || !inputState || !inputCity || !inputCountry || !inputDate || !inputTime) {
       return toast.error("Please fill all required fields");
     }
-
+  
     const form = new FormData();
     form.append("description", inputValue);
     form.append("state", inputState);
@@ -91,18 +91,16 @@ const AddEvent: React.FC = () => {
     form.append("date", inputDate);
     form.append("time", inputTime);
     if (inputImage) form.append("image", inputImage);
-
+  
     try {
       setSubmitLoading(true);
-
+  
       const res = editingId
         ? await api.put(`/events/update/${editingId}`, form)
         : await api.post("/events/add", form);
-
-      toast.success(editingId ? "Event updated successfully" : "Event added successfully");
-
+  
       const d = res.data.data;
-
+  
       const updatedEvent: EventItem = {
         id: d._id,
         text: d.description,
@@ -114,8 +112,17 @@ const AddEvent: React.FC = () => {
         time: d.time,
         createdAt: new Date(d.createdAt).toLocaleString(),
       };
-
-      setEvents((prev) => [updatedEvent, ...prev.filter((e) => e.id !== editingId)]);
+      setEvents((prev) => {
+        if (editingId) {
+          // Update existing
+          return prev.map((e) => (e.id === updatedEvent.id ? updatedEvent : e));
+        } else {
+          // Add new
+          return [updatedEvent, ...prev];
+        }
+      });
+      
+      toast.success(editingId ? "Event updated successfully" : "Event added successfully");
       resetForm();
     } catch {
       toast.error("Failed to save event");
@@ -123,6 +130,7 @@ const AddEvent: React.FC = () => {
       setSubmitLoading(false);
     }
   };
+  
 
   const resetForm = () => {
     setEditingId(null);
@@ -139,7 +147,7 @@ const AddEvent: React.FC = () => {
   const onEdit = (id: string) => {
     const e = events.find((ev) => ev.id === id);
     if (!e) return;
-
+  
     setEditingId(id);
     setInputValue(e.text);
     setInputState(e.state);
@@ -147,8 +155,9 @@ const AddEvent: React.FC = () => {
     setInputCountry(e.country || "");
     setInputDate(e.date || "");
     setInputTime(e.time || "");
-    setPreviewImage(`${BASE_URL}${e.image}`);
+    setPreviewImage(e.image ? `${BASE_URL}${e.image}` : null);
   };
+  
 
   const onDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this event?")) return;
