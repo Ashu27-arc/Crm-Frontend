@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import type { ChangeEvent, MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import api from "../api/axiosInstance.ts"
 
 type NotificationItem = {
