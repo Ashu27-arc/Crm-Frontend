@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import api from "../api/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -15,7 +15,7 @@ type EventItem = {
 };
 
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://localhost:3000";
 
 const AddEvent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -66,7 +66,7 @@ const AddEvent: React.FC = () => {
 
     fetchEvents();
   }, []);
-
+const fileInputRef=useRef<HTMLInputElement |null>(null);
   // Image Preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -142,6 +142,9 @@ const AddEvent: React.FC = () => {
     setInputTime("");
     setInputImage(null);
     setPreviewImage(null);
+    if(fileInputRef.current){
+      fileInputRef.current.value=""
+    }
   };
 
   const onEdit = (id: string) => {
@@ -190,7 +193,7 @@ const AddEvent: React.FC = () => {
         <input className="bg-gray-100 rounded-lg p-3 outline-none" placeholder="Country" value={inputCountry} onChange={(e) => setInputCountry(e.target.value)} />
         <input type="date" className="bg-gray-100 rounded-lg p-3 outline-none" value={inputDate} onChange={(e) => setInputDate(e.target.value)} />
         <input type="time" className="bg-gray-100 rounded-lg p-3 outline-none" value={inputTime} onChange={(e) => setInputTime(e.target.value)} />
-        <input type="file" accept="image/*" onChange={handleImageChange} />
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} />
 
         <button disabled={submitLoading} className="bg-blue-600 text-white rounded-lg px-5 py-3">
           {submitLoading ? "Submitting..." : editingId ? "Update Event" : "Add Event"}
