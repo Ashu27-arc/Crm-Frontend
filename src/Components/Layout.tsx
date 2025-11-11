@@ -69,15 +69,13 @@ const Layout = () => {
 
         {/* MOBILE SIDEBAR */}
         <div
-          className={`fixed inset-0 z-40 md:hidden transition duration-300 ${
-            sidebarOpen ? "visible bg-black bg-opacity-40" : "invisible"
-          }`}
+          className={`fixed inset-0 z-40 md:hidden transition duration-300 ${sidebarOpen ? "visible bg-black bg-opacity-40" : "invisible"
+            }`}
           onClick={() => setSidebarOpen(false)}
         >
           <div
-            className={`absolute top-0 left-0 w-64 h-full bg-blue-200 p-4 shadow-lg transform transition-transform duration-300 ${
-              sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
+            className={`absolute top-0 left-0 w-64 h-full bg-blue-200 p-4 shadow-lg transform transition-transform duration-300 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+              }`}
             onClick={(e) => e.stopPropagation()}
           >
             <NavLinks />

@@ -19,10 +19,10 @@ function App() {
         <Route path='/' element={<Login />} />
         <Route element={<Layout />}>
           <Route path='/Dashboard' element={<Dashboard />} />
-           <Route path='/Counseller' element={<Counseller />} />
+          <Route path='/Counseller' element={<Counseller />} />
           <Route path='/Add-Notification' element={<AddNotification />} />
           <Route path='/Add-Event' element={<AddEvent />} />
-               <Route path='/Register' element={<RegisterForm />} />
+          <Route path='/Register' element={<RegisterForm />} />
         </Route>
       </Routes>
     </>

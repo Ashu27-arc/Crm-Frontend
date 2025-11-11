@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true; 
+    let isMounted = true;
 
     (async () => {
       try {
@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
               .slice(0, 10)
           );
 
-      
+
           const eData = eRes.data?.data || [];
           const mappedE: EventRow[] = eData.map((e: any) => ({
             id: e._id,
@@ -83,22 +83,22 @@ const Dashboard: React.FC = () => {
     })();
 
     return () => {
-      isMounted = false; 
+      isMounted = false;
     };
   }, []);
 
-  
+
   const formatDate = (date?: string) =>
     date && !isNaN(new Date(date).getTime())
       ? new Date(date).toLocaleDateString()
       : "-";
 
-const formatTime = (date?: string | null) =>
+  const formatTime = (date?: string | null) =>
     date && !isNaN(new Date(date).getTime())
       ? new Date(date).toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        })
+        hour: "2-digit",
+        minute: "2-digit",
+      })
       : "-";
 
   return (
@@ -133,7 +133,7 @@ const formatTime = (date?: string | null) =>
             </div>
           </div>
           {/* total users */}
-              <div
+          <div
             onClick={() => navigate("/Counseller")}
             className="bg-white rounded-lg shadow-md p-6 border border-gray-100 cursor-pointer transition transform hover:scale-105 hover:shadow-blue-900"
           >
