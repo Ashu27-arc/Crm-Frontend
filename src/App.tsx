@@ -20,8 +20,6 @@ function App() {
           <Route path='/Dashboard' element={<Dashboard />} />
           <Route path='/Add-Notification' element={<AddNotification />} />
           <Route path='/Add-Event' element={<AddEvent />} />
-              
->>>>>>> 0d18b2dc8148ea83616b94237ed5fb871453a553
         </Route>
       </Routes>
     </>
