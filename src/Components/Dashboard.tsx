@@ -133,7 +133,11 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
           {/* total users */}
+<<<<<<< HEAD
           <div
+=======
+              {/* <div
+>>>>>>> 0d18b2dc8148ea83616b94237ed5fb871453a553
             onClick={() => navigate("/Counseller")}
             className="bg-white rounded-lg shadow-md p-6 border border-gray-100 cursor-pointer transition transform hover:scale-105 hover:shadow-blue-900"
           >
@@ -143,7 +147,7 @@ const Dashboard: React.FC = () => {
             <div className="text-gray-600 text-sm sm:text-base">
               Total Users
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

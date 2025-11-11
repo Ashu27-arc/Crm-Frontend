@@ -14,6 +14,7 @@ const Layout = () => {
      ${isActive(path) ? "bg-white shadow border border-gray-200" : "hover:bg-gray-200"}`;
 
   const handleLogout = () => {
+     if (!confirm("Are you sure you ")) return;
     localStorage.removeItem("token");
     navigate("/");
   };
@@ -35,9 +36,9 @@ const Layout = () => {
         <span className="text-gray-700 font-medium">Add Event</span>
       </div>
 
-      <div onClick={() => navigate("/Register")} className={linkClass("/Register")}>
+      {/* <div onClick={() => navigate("/Register")} className={linkClass("/Register")}>
         <span className="text-gray-700 font-medium">Add User</span>
-      </div>
+      </div> */}
     </nav>
   );
 

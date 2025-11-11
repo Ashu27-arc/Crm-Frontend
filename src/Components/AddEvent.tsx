@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
 import toast from "react-hot-toast";
 
@@ -15,7 +15,7 @@ type EventItem = {
 };
 
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = "http://localhost:5000";
 
 const AddEvent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -53,7 +53,7 @@ const AddEvent: React.FC = () => {
               time: n.time,
               createdAt: new Date(n.createdAt).toLocaleString(),
             }))
-            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+            .sort((a:EventItem, b:EventItem) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
           setEvents(mapped);
         }
@@ -68,7 +68,7 @@ const AddEvent: React.FC = () => {
   }, []);
 
   // Image Preview
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setInputImage(file);
