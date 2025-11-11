@@ -15,7 +15,7 @@ type EventItem = {
 };
 
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:5000";
 
 const AddEvent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
