@@ -133,7 +133,7 @@ const formatTime = (date?: string | null) =>
             </div>
           </div>
           {/* total users */}
-              <div
+              {/* <div
             onClick={() => navigate("/Counseller")}
             className="bg-white rounded-lg shadow-md p-6 border border-gray-100 cursor-pointer transition transform hover:scale-105 hover:shadow-blue-900"
           >
@@ -143,7 +143,7 @@ const formatTime = (date?: string | null) =>
             <div className="text-gray-600 text-sm sm:text-base">
               Total Users
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

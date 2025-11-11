@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import api from '../api/axiosInstance'
 
 type NotificationDto = {
   _id: string
@@ -7,15 +8,12 @@ type NotificationDto = {
   date: string
 }
 
-const API_BASE = 'http://localhost:3000/api/notifications'
-
 const CalendarIcon: React.FC<{ title?: string }> = ({ title }) => (
   <svg
     className="w-6 h-6 text-blue-600"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
   >
     <title>{title || 'Date'}</title>
     <path d="M7 2v2M17 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -34,33 +32,27 @@ const NotificationCards: React.FC = () => {
       try {
         setLoading(true)
         setError(null)
-        const res = await fetch(`${API_BASE}/all`)
-        const json = await res.json()
-        if (json?.success && Array.isArray(json.data)) {
-          setItems(json.data as NotificationDto[])
+
+        const res = await api.get("/notifications/all")
+
+        if (res.data?.success && Array.isArray(res.data.data)) {
+          setItems(res.data.data)
         } else {
           setItems([])
         }
-      } catch (e: any) {
-        setError(e?.message || 'Failed to load notifications')
+      } catch (err: any) {
+        setError(err?.response?.data?.message || "Failed to load notifications")
       } finally {
         setLoading(false)
       }
     }
+
     fetchAll()
   }, [])
 
-  if (loading) {
-    return <div className="p-4 text-gray-600">Loading notifications...</div>
-  }
-
-  if (error) {
-    return <div className="p-4 text-red-600">{error}</div>
-  }
-
-  if (!items.length) {
-    return <div className="p-4 text-gray-500">No notifications to show</div>
-  }
+  if (loading) return <div className="p-4 text-gray-600">Loading notifications...</div>
+  if (error) return <div className="p-4 text-red-600">{error}</div>
+  if (!items.length) return <div className="p-4 text-gray-500">No notifications to show</div>
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -83,5 +75,3 @@ const NotificationCards: React.FC = () => {
 }
 
 export default NotificationCards
-
-
