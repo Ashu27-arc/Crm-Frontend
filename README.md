@@ -1,4 +1,9 @@
-# React + TypeScript + Vite
+# Crm-Frontend
+
+## Live Demo
+🌐 **Frontend**: [https://crm-frontend-plum.vercel.app/](https://crm-frontend-plum.vercel.app/)
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
