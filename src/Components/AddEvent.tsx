@@ -15,7 +15,7 @@ type EventItem = {
 };
 
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://crm-backend-1-jsce.onrender.com";
 
 const AddEvent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -229,11 +229,14 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
               <tr key={e.id} className="border-t hover:bg-gray-50">
                 <td className="px-4 py-3">{i + 1}</td>
 
-                {/* ✅ FIXED IMAGE RENDER */}
+      
                 <td className="px-4 py-3">
-                  {e.image ? (
-                    <img src={`${BASE_URL}${e.image}`} className="w-14 h-14 rounded-md object-cover" />
-                  ) : "─"}
+              {e.image ? (
+    <img
+      src={`${BASE_URL}/${e.image?.replace(/^\/+/, "")}`}
+      className="w-24 h-24 rounded-md object-cover"
+    />
+  ) : "─"}
                 </td>
 
                 <td className="px-4 py-3">{e.text}</td>
@@ -267,9 +270,13 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
                 <span className="text-gray-500">{e.date} {e.time}</span>
               </div>
 
-              {/* ✅ FIXED IMAGE RENDER */}
-              {e.image && <img src={`${BASE_URL}${e.image}`} className="w-full h-40 rounded-lg object-cover mb-3" />}
-
+            
+             {e.image && (
+  <img
+    src={`${BASE_URL}/${e.image?.replace(/^\/+/, "")}`}
+    className="w-full h-56 rounded-lg object-cover mb-3"
+  />
+)}
               <p className="text-sm text-gray-700"><strong>State:</strong> {e.state}</p>
               <p className="text-sm text-gray-700"><strong>City:</strong> {e.city}</p>
               <p className="text-sm text-gray-700 mb-3"><strong>Country:</strong> {e.country}</p>
