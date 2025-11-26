@@ -6,7 +6,7 @@ import AddNotification from './Components/AddNotification'
 import AddEvent from './Components/AddEvent'
 import Layout from './Components/Layout'
 import { Toaster } from "react-hot-toast";
-
+import ProtectedRoute from './ProtectedRoutes'
 
 function App() {
   return (
@@ -17,9 +17,32 @@ function App() {
       <Routes>
         <Route path='/' element={<Login />} />
         <Route element={<Layout />}>
-          <Route path='/Dashboard' element={<Dashboard />} />
-          <Route path='/Add-Notification' element={<AddNotification />} />
-          <Route path='/Add-Event' element={<AddEvent />} />
+          <Route
+  path="/Dashboard"
+  element={
+    <ProtectedRoute>
+      <Dashboard />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/Add-Notification"
+  element={
+    <ProtectedRoute>
+      <AddNotification />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/Add-Event"
+  element={
+    <ProtectedRoute>
+      <AddEvent />
+    </ProtectedRoute>
+  }
+/>
         </Route>
       </Routes>
     </>
