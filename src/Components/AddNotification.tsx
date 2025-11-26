@@ -52,7 +52,6 @@ const AddNotification: React.FC = () => {
     fetchAll();
   }, []);
 
-  // ✅ Add or update a notification
   const onAddOrSave = async () => {
     const trimmed = inputValue.trim();
     const trimmedState = inputState.trim();

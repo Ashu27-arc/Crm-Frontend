@@ -4,8 +4,6 @@ const api = axios.create({
   baseURL: "https://crm-backend-1-jsce.onrender.com/api",
   
 });
-
-// ✅ Automatically attach token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {

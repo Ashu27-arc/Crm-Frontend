@@ -36,6 +36,7 @@ const AddEvent: React.FC = () => {
   // Fetch Events
   useEffect(() => {
     const fetchEvents = async () => {
+      
       try {
         setFetchLoading(true);
         const res = await api.get("/events/all");
