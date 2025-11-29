@@ -235,7 +235,7 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
               {e.image ? (
     <img
       src={`${BASE_URL}/${e.image?.replace(/^\/+/, "")}`}
-      className="w-24 h-24 rounded-md object-cover"
+      className="w-46 h-24 rounded-md object-cover"
     />
   ) : "─"}
                 </td>
@@ -270,7 +270,6 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
                 <span className="font-semibold text-gray-800">#{index + 1} — {e.text}</span>
                 <span className="text-gray-500">{e.date} {e.time}</span>
               </div>
-
             
              {e.image && (
   <img
@@ -296,4 +295,4 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
   );
 };
 
-export default AddEvent;
+export default AddEvent; 

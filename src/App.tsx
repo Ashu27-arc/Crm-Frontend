@@ -7,6 +7,7 @@ import AddEvent from './Components/AddEvent'
 import Layout from './Components/Layout'
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from './ProtectedRoutes'
+import CounsellerBooking from './Components/CounsellerBooking'
 
 function App() {
   return (
@@ -41,9 +42,19 @@ function App() {
     <ProtectedRoute>
       <AddEvent />
     </ProtectedRoute>
+
+  }
+/>
+<Route
+  path="/Counseller"
+  element={
+    <ProtectedRoute>
+      <CounsellerBooking />
+    </ProtectedRoute>
   }
 />
         </Route>
+        
       </Routes>
     </>
   )

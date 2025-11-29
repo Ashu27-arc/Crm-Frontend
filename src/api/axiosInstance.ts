@@ -1,7 +1,9 @@
 import axios from "axios";
-
+const isdev=true
 const api = axios.create({
-  baseURL: "https://crm-backend-1-jsce.onrender.com/api",
+  baseURL:isdev
+  ?"http://localhost:5000/api"
+  :"https://crm-backend-1-jsce.onrender.com/api"
   
 });
 api.interceptors.request.use((config) => {

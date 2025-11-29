@@ -36,9 +36,9 @@ const Layout = () => {
         <span className="text-gray-700 font-medium">Add Event</span>
       </div>
 
-      {/* <div onClick={() => navigate("/Register")} className={linkClass("/Register")}>
-        <span className="text-gray-700 font-medium">Add User</span>
-      </div> */}
+      <div onClick={() => navigate("/Counseller")} className={linkClass("/Counseller")}>
+        <span className="text-gray-700 font-medium">Booking details</span>
+      </div>
     </nav>
   );
 
@@ -70,7 +70,7 @@ const Layout = () => {
 
         {/* MOBILE SIDEBAR */}
         <div
-          className={`fixed inset-0 z-40 md:hidden transition duration-300 ${sidebarOpen ? "visible bg-black bg-opacity-40" : "invisible"
+          className={`fixed inset-0 z-40 md:hidden transition duration-300 ${sidebarOpen ?"none" : "invisible"
             }`}
           onClick={() => setSidebarOpen(false)}
         >
