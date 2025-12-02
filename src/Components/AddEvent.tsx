@@ -232,12 +232,11 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
 
       
                 <td className="px-4 py-3">
-              {e.image ? (
     <img
-      src={`${BASE_URL}/${e.image?.replace(/^\/+/, "")}`}
-      className="w-46 h-24 rounded-md object-cover"
-    />
-  ) : "─"}
+  src={`${BASE_URL}${e.image}`}
+  className="w-46 h-24 rounded-md object-cover"
+/>
+
                 </td>
 
                 <td className="px-4 py-3">{e.text}</td>
@@ -270,13 +269,10 @@ const fileInputRef=useRef<HTMLInputElement |null>(null);
                 <span className="font-semibold text-gray-800">#{index + 1} — {e.text}</span>
                 <span className="text-gray-500">{e.date} {e.time}</span>
               </div>
-            
-             {e.image && (
-  <img
-    src={`${BASE_URL}/${e.image?.replace(/^\/+/, "")}`}
-    className="w-full h-56 rounded-lg object-cover mb-3"
-  />
-)}
+            <img
+  src={`${BASE_URL}${e.image}`}
+  className="w-full h-56 rounded-md object-cover mb-3"
+/>
               <p className="text-sm text-gray-700"><strong>State:</strong> {e.state}</p>
               <p className="text-sm text-gray-700"><strong>City:</strong> {e.city}</p>
               <p className="text-sm text-gray-700 mb-3"><strong>Country:</strong> {e.country}</p>
