@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
 
       {/* Notifications Table */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        Notifications
+      Latest Notifications
       </h2>
       <div className="bg-white rounded-lg shadow-md overflow-x-auto border border-gray-100 mb-8">
         <table className="w-full min-w-[600px]">
@@ -213,7 +213,7 @@ const Dashboard: React.FC = () => {
 
       {/* Events Table */}
       <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-        Events
+       Latest Events
       </h2>
       <div className="bg-white rounded-lg shadow-md overflow-x-auto border border-gray-100">
         <table className="w-full min-w-[700px]">
