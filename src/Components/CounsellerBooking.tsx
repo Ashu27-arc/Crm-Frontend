@@ -10,7 +10,7 @@ type BookingItem = {
   courses: string;
 };
 const socket = io(
-  'https://crm-backend-1-jsce.onrender.com/api');
+  'https://crm-backend-1-jsce.onrender.com');
 // const socket = io("http://localhost:5000");
 
 const CounsellerBooking = () => {
