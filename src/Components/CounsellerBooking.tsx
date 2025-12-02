@@ -1,6 +1,6 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
-
+import { io } from "socket.io-client";
 type BookingItem = {
   _id: string;
   name: string;
@@ -9,21 +9,21 @@ type BookingItem = {
   BookedCounseller: string;
   courses: string;
 };
+const socket = io(
+  'https://crm-backend-1-jsce.onrender.com/api');
+// const socket = io("http://localhost:5000");
 
 const CounsellerBooking = () => {
   const [bookings, setBookings] = useState<BookingItem[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const token = localStorage.getItem("token");
-
         const res = await api.get("/counseller/booking-details", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        setBookings(res.data.data || []); // backend must return { data: [...] }
+        setBookings(res.data.data || []);
       } catch (error) {
         console.error("Error fetching bookings:", error);
       } finally {
@@ -32,6 +32,15 @@ const CounsellerBooking = () => {
     };
 
     fetchBookings();
+  }, []);
+  useEffect(() => {
+    socket.on("booking-created", (newBooking: BookingItem) => {
+      setBookings((prev) => [newBooking, ...prev]);
+    });
+
+    return () => {
+      socket.off("booking-created");
+    };
   }, []);
 
   if (loading) return <p className="ml-5 mt-5 text-lg">Loading...</p>;
