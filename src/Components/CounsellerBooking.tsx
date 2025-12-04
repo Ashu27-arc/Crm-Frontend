@@ -8,7 +8,6 @@ type BookingItem = {
   phoneNumber: string;
   BookedCounseller: string;
   courses: string;
-  exam:string;
 };
 const socket = io(
   'https://crm-backend-1-jsce.onrender.com');
@@ -59,7 +58,6 @@ const CounsellerBooking = () => {
               <th className="px-6 py-3">Name</th>
               <th className="px-6 py-3">Email</th>
               <th className="px-6 py-3">Phone</th>
-              <th className="px-6 py-3">Exam</th>
               <th className="px-6 py-3">Counsellor</th>
               <th className="px-6 py-3">Course</th>
             </tr>
@@ -79,7 +77,6 @@ const CounsellerBooking = () => {
                   <td className="px-6 py-4">{item.name}</td>
                   <td className="px-6 py-4">{item.email}</td>
                   <td className="px-6 py-4">{item.phoneNumber}</td>
-                  <td className="px-6 py-4">{item.exam}</td>
                   <td className="px-6 py-4">{item.BookedCounseller}</td>
                   <td className="px-6 py-4">{item.courses}</td>
                 </tr>
