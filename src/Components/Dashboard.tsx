@@ -27,6 +27,7 @@ type BookingRow = {
   phoneNumber: string;
   BookedCounseller: string;
   courses: string;
+  exam:string
 };
 
 const Dashboard: React.FC = () => {
@@ -93,6 +94,7 @@ const Dashboard: React.FC = () => {
             phoneNumber: b.phoneNumber,
             BookedCounseller: b.BookedCounseller,
             courses: b.courses,
+            exam:b.exam
           }));
 
           setBookings(
@@ -260,6 +262,7 @@ const Dashboard: React.FC = () => {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Exam</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Counsellor</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Courses</th>
                
@@ -276,6 +279,7 @@ const Dashboard: React.FC = () => {
                     <td className="px-4 py-3">{b.name}</td>
                     <td className="px-4 py-3">{b.phoneNumber}</td>
                     <td className="px-4 py-3">{b.email}</td>
+                    <td className="px-4 py-3">{b.exam}</td>
                     <td className="px-4 py-3">{b.BookedCounseller}</td>
                     <td className="px-4 py-3">{b.courses}</td>
                   </tr>
